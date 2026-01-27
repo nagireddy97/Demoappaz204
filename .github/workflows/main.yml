@@ -41,7 +41,7 @@ jobs:
       # - .pdb
       # - intermediate files
       - name: Build
-        run: dotnet build --configuration $BUILD_CONFIGURATION
+        run: dotnet build 
 
       # 4️⃣ STEP OUTPUT VARIABLE
       - name: Set package version
@@ -51,10 +51,7 @@ jobs:
       # 5️⃣ PACK: Create NuGet package (.nupkg)
       - name: Pack NuGet package
         run: |
-          dotnet pack \
-            --configuration $BUILD_CONFIGURATION \
-            --output $PACKAGE_OUTPUT \
-            /p:Version=${{ steps.version.outputs.version }}
+          dotnet pack --output $PACKAGE_OUTPUT p:Version=${{ steps.version.outputs.version }}
 
       # 6️⃣ COLLECT ARTIFACT
       - name: Upload package as CI artifact
@@ -70,7 +67,4 @@ jobs:
       # 8️⃣ SECRET VARIABLE (secrets)
       - name: Publish package to GitHub Packages
         run: |
-          dotnet nuget push "${{ env.PACKAGE_OUTPUT }}/*.nupkg" \
-            --source "${{ vars.NUGET_FEED_URL }}" \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --skip-duplicate
+          dotnet nuget push "${{ env.PACKAGE_OUTPUT }}/*.nupkg" --source "${{ vars.NUGET_FEED_URL }}" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
