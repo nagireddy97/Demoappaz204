@@ -1,39 +1,27 @@
-steps:
+name: Demo Pipeline
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.2
- 
+
       - name: setup SDK Azhar
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
- 
+
       - name: Restore dependencies
         run: dotnet restore
- 
+
       - name: Build
         run: dotnet build
- 
+
       - name: Pack
         run: dotnet pack --output ./nupkg
-     
-      - name: Publish to Github Packages
-        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/ibnehussain/index.json"
-      - name: Checkout code
-        uses: actions/checkout@v6.0.2
- 
-      - name: setup SDK Azhar
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
- 
-      - name: Restore dependencies
-        run: dotnet restore
- 
-      - name: Build
-        run: dotnet build
- 
-      - name: Pack
-        run: dotnet pack --output ./nupkg
-     
+      
       - name: Publish to Github Packages
         run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/nagireddy97/index.json"
